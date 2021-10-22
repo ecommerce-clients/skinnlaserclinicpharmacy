@@ -1,0 +1,241 @@
+{{ define "main" }}
+<script>
+var pagenames = "Home";
+</script>
+
+<!-- banner -->
+{{ if site.Data.homepage.banner.enable }}
+{{ with site.Data.homepage.banner }}
+
+<div class="d-block">
+<!--Carousel Wrapper-->
+<div id="carousel-example-1z" class="carousel slide carousel-fade z-depth-1-half" data-ride="carousel">
+    <!--Indicators-->
+  
+    <!--/.Indicators-->
+    <!--Slides-->
+    <div class="carousel-inner" role="listbox">
+      <!--First slide-->
+      <div id="sliders_items_imgs">
+       
+        <div class="carousel-item active" id="slider_main_id">
+          <div class="d-block w-100 text-center " style="
+          padding-top: 150px;
+          height: 300px;
+      "><img src="/contact/Loading2.gif" /></div>
+      </div>
+        
+      </div>
+      
+      <!--/Third slide-->
+    </div>
+    <!--/.Slides-->
+    <!--Controls-->
+    <a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+    <!--/.Controls-->
+  </div>
+</div>
+  <!--/.Carousel Wrapper-->
+{{ end }}
+{{ end }}
+<!-- /banner -->
+
+<!-- products -->
+{{ if site.Data.homepage.products.enable }}
+
+<section class="section pb-0">
+  <div class="container">
+    <div class="col-12 text-center mb-4">
+      <div class="row">
+        <div class="col-lg-9 col-sm-12 text-center mb-4">
+          <input id="myInput" type="text" name="search" placeholder="Search" class="hide form-control">
+        </div>
+        
+        <div class="col-lg-3 col-sm-12 text-center mb-4">
+        <select class="form-control" style="height: 100%;" id="pricerageallow" onchange="sort()">
+          <option disabled selected>Select price range</option>
+          <option value="byPrice">Select low to high</option>
+          <option value="byDistance">Select high to low</option>
+        </select>
+        </div>
+      </div>
+    </div>
+    <style>
+      #myInput[type=text] {
+        width: 10px;
+        box-sizing: border-box;
+
+        border-radius: 4px;
+        font-size: 16px;
+
+        background-image: url('/images/searchicon.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        padding: 12px 20px 12px 40px;
+        -webkit-transition: width 0.4s ease-in-out;
+        transition: width 0.4s ease-in-out;
+      }
+
+      #myInput[type=text]:focus {
+        width: 100%;
+      }
+
+      @media screen and (max-width: 800px) {
+        #myInput[type=text] {
+        width: 100%;
+      }
+}
+
+    </style>
+    
+ 
+    <div class="row" id="search">
+      
+      {{ range (where site.RegularPages "Type" "products") }}
+      <div class="col-lg-4 col-sm-6 mb-4 pricesrangeclass" data-price="{{ .Params.Price }}">
+        <div class="card border-0 text-center showhidefile">
+          <div class="overlay">
+            <div class="text"><a href="{{ .Permalink }}" class="ahrefview" style="color:white;">View More</a></div>
+          </div>
+          <a href="{{ .Permalink }}">
+            
+            {{ range first 1 .Params.Images }}
+            <img src="{{ .image | absURL }}" alt="{{ .Title }}" class="img-fluid mx-auto" style="height: 230px;">
+            {{ end }}
+              </a>
+          <div class="card-body">
+            <a href="{{ .Permalink }}" class="h4 "><div class="titlealign text-center" title=""><script>document.write(decodeURIComponent('{{ .Title }}').replaceAll('+',' '))</script></div></a>
+            <p><script>document.write(decodeURIComponent('{{ .Params.Category }}').replaceAll('+',' '))</script></p>
+            <div class="mb-4">
+              
+            {{ if .Params.PriceBefore }}
+            
+              <s>PKR <script>document.write(new Intl.NumberFormat().format(parseFloat('{{ .Params.PriceBefore }}')))</script></s>
+              {{ end }}
+              <span class="rangeprice" hidden>{{ .Params.Price }}</span>
+              <span class="lead text-primary">PKR <span style="font-weight: 500;"><script>document.write(new Intl.NumberFormat().format(parseFloat('{{ .Params.Price }}')))</script></span></span>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" id="modalActivate" data-item-id="{{ .Params.ProductID }}"
+            data-item-name="{{ .Title }}" {{ range first 1 .Params.Images }} data-item-image="{{ .image | absURL }}"
+            {{ end }} data-item-price="{{ .Params.Price }}" id="add_to_cart" data-item-url="{{ .Permalink }}"
+            data-item-description="{{ .Description }}"
+            onclick="Check({{ .Params.ProductID }},{{ .Title }},{{ .Params.Description }},{{ .Params.Price }}
+            ,{{ range first 1 .Params.Images }}{{ .image | absURL }}{{ end }},1)" title="PKR {{ .Params.Price }} ">
+            Add to cart
+          </button>
+          <span class="whatsappallow d-none">
+            <a href="#" id="whatsapp{{ .Params.ProductID }}" onclick="whatsapp('{{ .Params.ProductID }}','{{ .Title }}')" class="btn btn-sm btn-outline-primary" target="_blank"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 20px;"></i></a>
+          
+          </span>
+          
+          </div>
+
+          
+        </div>
+      </div>
+      {{ end }}
+  
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+
+
+<ul class="pagination" id="pagin">
+  <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> -->
+ 
+  <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+</ul>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  	pageSize = 12;
+
+var pageCount =  $(".pricesrangeclass").length / pageSize;
+  
+   for(var i = 0 ; i<pageCount;i++){
+      
+     $("#pagin").append('<li class="page-item"><a class="page-link" href="#">'+(i+1)+'</a></li> ');
+   }
+      $("#pagin li").first().addClass("active")
+  showPage = function(page) {
+    $(".pricesrangeclass").hide();
+    $(".pricesrangeclass").each(function(n) {
+        if (n >= pageSize * (page - 1) && n < pageSize * page)
+            $(this).show();
+    });        
+}
+  
+showPage(1);
+
+$("#pagin li").click(function() {
+    $("#pagin li").removeClass("active");
+    $(this).addClass("active");
+    showPage(parseInt($(this).text())) 
+});
+</script>
+
+
+{{ end }}
+<!-- /products -->
+<style>
+  .ahrefview{
+    opacity:1;
+    background-color: transparent;
+    border: 1px solid var(--font);
+    
+    padding: 12px 35px;
+    font-size: 15px;
+    z-index: 3;
+   
+  }
+  .overlay {
+    position: absolute;
+    background-color: var(--background);
+    top: 0;
+    left: 0;
+  right: 0;
+    opacity: 0;
+    height: 0;
+    visibility: visible;
+    overflow: hidden;
+   
+    
+    transition: 0.5s ease;
+   
+   
+}
+
+.showhidefile:hover .overlay {
+    opacity: 0.85;
+    height: 230px;
+    /* filter: alpha(opacity=100); */
+}
+
+.text {
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+
+
+</style>
+
+
+
+{{ end }}
